@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import Footer from '../../navigation/footer/Footer';
 import Header from '../../navigation/header/Header';
 
 export interface IPrimaryLayout extends React.ComponentPropsWithoutRef<'div'> {
@@ -18,9 +17,8 @@ const PrimaryLayout: React.FC<IPrimaryLayout> = ({
       </Head>
       <div {...divProps}>
         <Header />
-        <main className="px-5">{children}</main>
-        <div className="m-auto" />
-        <Footer />
+        <main className="app-containter">{children}</main>
+        {/* <Footer /> */}
       </div>
     </>
   );

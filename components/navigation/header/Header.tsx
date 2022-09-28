@@ -20,13 +20,13 @@ const Header: React.FC<IHeader> = ({ className, ...headerProps }) => {
   return (
     <header
       {...headerProps}
-      className={`w-full flex flex-row justify-between ${className}`}
+      className={`w-full flex flex-row justify-between shadow-md ${className}`}
     >
       <div className="space-x-5 m-5">
         <Link href="/">
           <a className="hover:underline">{t.item1}</a>
         </Link>
-        <Link href="/about">
+        <Link href="/talent-register">
           <a className="hover:underline">{t.item2}</a>
         </Link>
       </div>

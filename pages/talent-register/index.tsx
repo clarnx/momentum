@@ -1,11 +1,52 @@
 import { ErrorMessage } from '@hookform/error-message';
-import { Avatar, Button, Input, Textarea } from '@material-tailwind/react';
+import {
+  Avatar,
+  Button,
+  Chip,
+  Input,
+  Option,
+  Select,
+  Textarea,
+} from '@material-tailwind/react';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { TiDeleteOutline } from 'react-icons/ti';
+import PrimaryLayout from '../../components/layouts/primary/PrimaryLayout';
+import { IUser } from '../../interfaces/user.interface';
+import { CountriesList } from '../../lib/countries/countriesList';
 import { failedAlert } from '../../services/notification.service';
+import { NextPageWithLayout } from '../page';
 
-const TalentRegisterPage = () => {
-  const [skills, setSkills] = useState();
+const TalentRegisterPage: NextPageWithLayout = () => {
+  return (
+    <div>
+      <div className=" pb-6 text-blue-gray-800">
+        <h1 className="text-blue-gray-800 font-bold text-3xl">
+          Partner application
+        </h1>
+        <small className="tracking-wider">
+          Enter personal data and details and start journey with us
+        </small>
+      </div>
+      <div>
+        <RegisterForm />
+      </div>
+    </div>
+  );
+};
+
+TalentRegisterPage.getLayout = (page) => {
+  return <PrimaryLayout pageTitle="Talent Register">{page}</PrimaryLayout>;
+};
+export default TalentRegisterPage;
+
+interface IRegisterForm {
+  preloadValues?: IUser;
+}
+
+const RegisterForm = ({ preloadValues }: IRegisterForm) => {
+  const [skill, setSkill] = useState<string>('');
+  const [skillsArray, setSkillsArray] = useState<string[]>([]);
   const [picture, setPicture] = useState<string | Blob>('');
   const [pictureURL, setPictureURL] = useState<string>();
   const {
@@ -35,6 +76,8 @@ const TalentRegisterPage = () => {
   const onSubmit = (data: any) => {
     if (isDirty && picture !== '') {
       console.log(data);
+      console.log(skillsArray);
+      console.log(picture);
     } else {
       failedAlert('You should upload a profile picture');
     }
@@ -49,37 +92,58 @@ const TalentRegisterPage = () => {
     }
   };
 
+  const addSkillToArray = () => {
+    if (skill.trim().toLocaleLowerCase() !== '') {
+      let value = skill?.trim().toLocaleLowerCase();
+      if (!skillsArray.includes(value)) {
+        const newArray = [...skillsArray];
+        newArray.unshift(value);
+        setSkillsArray(newArray);
+        setSkill('');
+      }
+    }
+  };
+
+  const deleteSkill = (value: string) => {
+    let newArray = [...skillsArray];
+    newArray = newArray.filter(
+      (skill) => skill !== value.trim().toLocaleLowerCase()
+    );
+    setSkillsArray(newArray);
+  };
+
   return (
     <div>
-      <h1>Registro de Talentos</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <Controller
-            name="firstName"
-            control={control}
-            rules={{ required: 'This is required.' }}
-            render={({ field }) => <Input label="Name" {...field} />}
-          />
-          <ErrorMessage
-            as={'span'}
-            className={'text-red-400 text-xs'}
-            errors={errors}
-            name="firstName"
-          />
-        </div>
-        <div>
-          <Controller
-            name="lastName"
-            control={control}
-            rules={{ required: 'This is required.' }}
-            render={({ field }) => <Input label="lastName" {...field} />}
-          />
-          <ErrorMessage
-            as={'span'}
-            className={'text-red-400 text-xs'}
-            errors={errors}
-            name="lastName"
-          />
+      <form className="flex flex-col gap-4">
+        <div className="flex flex-wrap gap-3">
+          <div className="flex-grow">
+            <Controller
+              name="firstName"
+              control={control}
+              rules={{ required: 'This is required.' }}
+              render={({ field }) => <Input label="Name" {...field} />}
+            />
+            <ErrorMessage
+              as={'span'}
+              className={'text-red-400 text-xs'}
+              errors={errors}
+              name="firstName"
+            />
+          </div>
+          <div className="flex-grow">
+            <Controller
+              name="lastName"
+              control={control}
+              rules={{ required: 'This is required.' }}
+              render={({ field }) => <Input label="Last Name" {...field} />}
+            />
+            <ErrorMessage
+              as={'span'}
+              className={'text-red-400 text-xs'}
+              errors={errors}
+              name="lastName"
+            />
+          </div>
         </div>
 
         <div>
@@ -156,8 +220,8 @@ const TalentRegisterPage = () => {
           />
         </div>
 
-        <div>
-          <div>
+        <div className="flex gap-3 flex-wrap">
+          <div className="w-full sm:w-fit">
             <Controller
               name="phone.prefix"
               rules={{
@@ -165,7 +229,12 @@ const TalentRegisterPage = () => {
               }}
               control={control}
               render={({ field }) => (
-                <Input label="Prefix" type={'number'} {...field} />
+                <Input
+                  className="w-full sm:w-fit"
+                  label="Prefix"
+                  type={'number'}
+                  {...field}
+                />
               )}
             />
             <ErrorMessage
@@ -176,7 +245,7 @@ const TalentRegisterPage = () => {
               )}
             />
           </div>
-          <div>
+          <div className="flex-grow">
             <Controller
               name="phone.number"
               control={control}
@@ -201,7 +270,17 @@ const TalentRegisterPage = () => {
             rules={{
               required: 'This is required.',
             }}
-            render={({ field }) => <Input label="Country" {...field} />}
+            render={({ field }) => (
+              <Select label="Country" {...field}>
+                {CountriesList.map((item) => {
+                  return (
+                    <Option key={item.code} value={item.code}>
+                      {item.name}
+                    </Option>
+                  );
+                })}
+              </Select>
+            )}
           />
           <ErrorMessage
             errors={errors}
@@ -237,8 +316,45 @@ const TalentRegisterPage = () => {
         </div>
 
         <div>
+          <div className=" flex flex-col gap-3">
+            <Input
+              label="Add your skills"
+              onKeyDown={(e) => (e.key === 'Enter' ? addSkillToArray() : null)}
+              onChange={(e) => setSkill(e.target.value)}
+              value={skill}
+            />
+            <Button
+              onClick={addSkillToArray}
+              className="text-xs lowercase h-6 w-12 p-0 m-0"
+              color="gray"
+              size="sm"
+            >
+              add
+            </Button>
+          </div>
+          <div className="flex gap-3 flex-wrap py-4">
+            {skillsArray.map((skill, index) => (
+              <Chip
+                className="capitalize"
+                key={index}
+                value={skill}
+                icon={
+                  <TiDeleteOutline
+                    title="Delete Skill"
+                    size={20}
+                    cursor="pointer"
+                    onClick={() => deleteSkill(skill)}
+                  />
+                }
+              />
+            ))}
+          </div>
+        </div>
+
+        <div>
           <label className="cursor-pointer" htmlFor="coverImage">
             <Avatar
+              className=""
               size="xxl"
               src={pictureURL ? pictureURL : '/no-image.jpg'}
               alt="profile picture"
@@ -255,7 +371,11 @@ const TalentRegisterPage = () => {
         </div>
 
         <div>
-          <Button disabled={!isValid} type="submit">
+          <Button
+            onClick={handleSubmit(onSubmit)}
+            disabled={!isValid}
+            type="button"
+          >
             Save
           </Button>
         </div>
@@ -263,5 +383,3 @@ const TalentRegisterPage = () => {
     </div>
   );
 };
-
-export default TalentRegisterPage;
