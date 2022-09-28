@@ -31,11 +31,28 @@ const Header: React.FC<IHeader> = ({ className, ...headerProps }) => {
         </Link>
       </div>
       <div className="space-x-5 m-5">
-        <select defaultValue={locale} onChange={changeLanguage}>
-          <option value="en">EN</option>
-          <option value="es">ES</option>
+        <select
+          className="cursor-pointer p-2 outline-none"
+          defaultValue={locale}
+          onChange={changeLanguage}
+        >
+          <option className="p-2" value="en">
+            EN
+          </option>
+          <option className="p-2" value="es">
+            ES
+          </option>
         </select>
-        {/* <AuthButton /> */}
+        {/* <Select
+          className="min-w-[100px]"
+          variant="static"
+          value={locale}
+          defaultValue={locale}
+          onChange={changeLanguage}
+        >
+          <Option value="en">EN</Option>
+          <Option value="es">ES</Option>
+        </Select> */}
       </div>
     </header>
   );

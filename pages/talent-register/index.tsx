@@ -8,6 +8,7 @@ import {
   Select,
   Textarea,
 } from '@material-tailwind/react';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { TiDeleteOutline } from 'react-icons/ti';
@@ -17,16 +18,20 @@ import { CountriesList } from '../../lib/countries/countriesList';
 import { failedAlert } from '../../services/notification.service';
 import { NextPageWithLayout } from '../page';
 
+import en from '../../locales/en/talent-register';
+import es from '../../locales/es/talent-register';
+
 const TalentRegisterPage: NextPageWithLayout = () => {
+  const router = useRouter();
+  const { locale } = router;
+
+  const t = locale === 'en' ? en : es;
+
   return (
     <div>
       <div className=" pb-6 text-blue-gray-800">
-        <h1 className="text-blue-gray-800 font-bold text-3xl">
-          Partner application
-        </h1>
-        <small className="tracking-wider">
-          Enter personal data and details and start journey with us
-        </small>
+        <h1 className="text-blue-gray-800 font-bold text-3xl">{t.title}</h1>
+        <small className="tracking-wider">{t.subtitle}</small>
       </div>
       <div>
         <RegisterForm />
@@ -45,6 +50,11 @@ interface IRegisterForm {
 }
 
 const RegisterForm = ({ preloadValues }: IRegisterForm) => {
+  const router = useRouter();
+  const { locale } = router;
+
+  const t = locale === 'en' ? en : es;
+
   const [skill, setSkill] = useState<string>('');
   const [skillsArray, setSkillsArray] = useState<string[]>([]);
   const [picture, setPicture] = useState<string | Blob>('');
@@ -344,19 +354,20 @@ const RegisterForm = ({ preloadValues }: IRegisterForm) => {
             <div className="flex items-center justify-between">
               <Button
                 onClick={addSkillToArray}
-                className="text-xs lowercase h-6 w-12 p-0 m-0"
+                className="text-xs lowercase h-6 w-14 p-0 m-0 px-1"
                 color="gray"
                 size="sm"
               >
-                add
+                {t.addSkillButton}
               </Button>
               {skillsArray.length > 0 ? (
                 <p className="text-right text-xs text-gray-600 pt-1">
-                  Tienes {skillsArray.length} skills agregados
+                  {t.skillDescription_1} {skillsArray.length}{' '}
+                  {t.skillDescription_2}
                 </p>
               ) : (
                 <p className="text-right text-xs text-gray-600 pt-1">
-                  No has agregado ninguna skill
+                  {t.skillDescription_empty}
                 </p>
               )}
             </div>
@@ -382,8 +393,8 @@ const RegisterForm = ({ preloadValues }: IRegisterForm) => {
 
         <div className="flex flex-col gap-4 pb-3">
           <div>
-            <p className="text-xl font-bold">Choose your profile picture</p>
-            <small>Smile, we know that you look awesome.</small>
+            <p className="text-xl font-bold">{t.pictureTitle}</p>
+            <small>{t.pictureSubtitle}</small>
           </div>
           <div>
             <label className="cursor-pointer" htmlFor="coverImage">
@@ -412,7 +423,7 @@ const RegisterForm = ({ preloadValues }: IRegisterForm) => {
             disabled={!isValid}
             type="button"
           >
-            Save
+            {t.button}
           </Button>
         </div>
       </form>
