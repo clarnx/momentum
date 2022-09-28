@@ -4,17 +4,19 @@ import Header from '../../navigation/header/Header';
 
 export interface IPrimaryLayout extends React.ComponentPropsWithoutRef<'div'> {
   justify?: 'items-center' | 'items-start';
+  pageTitle?: string;
 }
 
 const PrimaryLayout: React.FC<IPrimaryLayout> = ({
   children,
+  pageTitle = 'NextJs Fullstack App Template',
   justify = 'items-center',
   ...divProps
 }) => {
   return (
     <>
       <Head>
-        <title>NextJs Fullstack App Template</title>
+        <title>{pageTitle}</title>
       </Head>
       <div {...divProps} className={`min-h-screen flex flex-col ${justify}`}>
         <Header />

@@ -13,7 +13,7 @@ const Header: React.FC<IHeader> = ({ className, ...headerProps }) => {
         <Link href="/">
           <a className="hover:underline">Home</a>
         </Link>
-        <Link href="/">
+        <Link href="/about">
           <a className="hover:underline">Store</a>
         </Link>
       </div>
