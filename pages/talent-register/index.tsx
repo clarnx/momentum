@@ -190,6 +190,13 @@ const RegisterForm = ({ preloadValues }: IRegisterForm) => {
           <Controller
             name="linkedin"
             control={control}
+            rules={{
+              pattern: {
+                value:
+                  /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,}))\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/i,
+                message: 'Should add a valid url',
+              },
+            }}
             render={({ field }) => (
               <Input label="Linkedin Profile" type={'url'} {...field} />
             )}
@@ -206,6 +213,13 @@ const RegisterForm = ({ preloadValues }: IRegisterForm) => {
         <div>
           <Controller
             name="email"
+            rules={{
+              pattern: {
+                value:
+                  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                message: 'You should type a valid email adress',
+              },
+            }}
             control={control}
             render={({ field }) => (
               <Input label="Email" type={'email'} {...field} />
@@ -317,20 +331,35 @@ const RegisterForm = ({ preloadValues }: IRegisterForm) => {
 
         <div>
           <div className=" flex flex-col gap-3">
-            <Input
-              label="Add your skills"
-              onKeyDown={(e) => (e.key === 'Enter' ? addSkillToArray() : null)}
-              onChange={(e) => setSkill(e.target.value)}
-              value={skill}
-            />
-            <Button
-              onClick={addSkillToArray}
-              className="text-xs lowercase h-6 w-12 p-0 m-0"
-              color="gray"
-              size="sm"
-            >
-              add
-            </Button>
+            <div>
+              <Input
+                label="Add your skills"
+                onKeyDown={(e) =>
+                  e.key === 'Enter' ? addSkillToArray() : null
+                }
+                onChange={(e) => setSkill(e.target.value)}
+                value={skill}
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <Button
+                onClick={addSkillToArray}
+                className="text-xs lowercase h-6 w-12 p-0 m-0"
+                color="gray"
+                size="sm"
+              >
+                add
+              </Button>
+              {skillsArray.length > 0 ? (
+                <p className="text-right text-xs text-gray-600 pt-1">
+                  Tienes {skillsArray.length} skills agregados
+                </p>
+              ) : (
+                <p className="text-right text-xs text-gray-600 pt-1">
+                  No has agregado ninguna skill
+                </p>
+              )}
+            </div>
           </div>
           <div className="flex gap-3 flex-wrap py-4">
             {skillsArray.map((skill, index) => (
@@ -351,27 +380,34 @@ const RegisterForm = ({ preloadValues }: IRegisterForm) => {
           </div>
         </div>
 
-        <div>
-          <label className="cursor-pointer" htmlFor="coverImage">
-            <Avatar
-              className=""
-              size="xxl"
-              src={pictureURL ? pictureURL : '/no-image.jpg'}
-              alt="profile picture"
-              variant="circular"
+        <div className="flex flex-col gap-4 pb-3">
+          <div>
+            <p className="text-xl font-bold">Choose your profile picture</p>
+            <small>Smile, we know that you look awesome.</small>
+          </div>
+          <div>
+            <label className="cursor-pointer" htmlFor="coverImage">
+              <Avatar
+                className=""
+                size="xxl"
+                src={pictureURL ? pictureURL : '/no-image.jpg'}
+                alt="profile picture"
+                variant="circular"
+              />
+            </label>
+            <input
+              id="coverImage"
+              type="file"
+              className="hidden cursor-pointer"
+              onChange={(e) => handlePicture(e)}
+              accept="image/*"
             />
-          </label>
-          <input
-            id="coverImage"
-            type="file"
-            className="hidden cursor-pointer"
-            onChange={(e) => handlePicture(e)}
-            accept="image/*"
-          />
+          </div>
         </div>
 
         <div>
           <Button
+            className={`${!isValid ? 'cursor-not-allowed' : 'cursor-pointer'}`}
             onClick={handleSubmit(onSubmit)}
             disabled={!isValid}
             type="button"
