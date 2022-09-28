@@ -3,14 +3,12 @@ import Footer from '../../navigation/footer/Footer';
 import Header from '../../navigation/header/Header';
 
 export interface IPrimaryLayout extends React.ComponentPropsWithoutRef<'div'> {
-  justify?: 'items-center' | 'items-start';
   pageTitle?: string;
 }
 
 const PrimaryLayout: React.FC<IPrimaryLayout> = ({
   children,
   pageTitle = 'NextJs Fullstack App Template',
-  justify = 'items-center',
   ...divProps
 }) => {
   return (
@@ -18,7 +16,7 @@ const PrimaryLayout: React.FC<IPrimaryLayout> = ({
       <Head>
         <title>{pageTitle}</title>
       </Head>
-      <div {...divProps} className={`min-h-screen flex flex-col ${justify}`}>
+      <div {...divProps}>
         <Header />
         <main className="px-5">{children}</main>
         <div className="m-auto" />

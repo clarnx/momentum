@@ -1,12 +1,27 @@
 import { useRouter } from 'next/router';
 import PrimaryLayout from '../components/layouts/primary/PrimaryLayout';
-// import Search from '../components/utility/search/Search';
 import { NextPageWithLayout } from './page';
 
-const Home: NextPageWithLayout = () => {
-  const { locale } = useRouter();
+import en from '../locales/en/home';
+import es from '../locales/es/home';
 
-  return <div></div>;
+const Home: NextPageWithLayout = () => {
+  const router = useRouter();
+  const { locale } = router;
+
+  const t = locale === 'en' ? en : es;
+  return (
+    <div>
+      <h1>{t.title}</h1>
+      <small>{t.subtitle}</small>
+      <div>
+        <h1>{t.welcome} Usuario!</h1>
+        <p>{t.description}</p>
+        <button>{t.button}</button>
+      </div>
+      <div>{t.cookies}</div>
+    </div>
+  );
 };
 
 export default Home;
