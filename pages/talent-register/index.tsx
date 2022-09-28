@@ -1,14 +1,18 @@
 import { ErrorMessage } from '@hookform/error-message';
-import { Button, Input, Textarea } from '@material-tailwind/react';
+import { Avatar, Button, Input, Textarea } from '@material-tailwind/react';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { failedAlert } from '../../services/notification.service';
 
 const TalentRegisterPage = () => {
   const [skills, setSkills] = useState();
-  const [picture, setPicture] = useState<any>();
+  const [picture, setPicture] = useState<string | Blob>('');
+  const [pictureURL, setPictureURL] = useState<string>();
   const {
     control,
     handleSubmit,
+    register,
+    setValue,
     formState: { errors, isDirty, isValid },
   } = useForm({
     defaultValues: {
@@ -24,17 +28,24 @@ const TalentRegisterPage = () => {
         number: '',
       },
       country: '',
-      picture: '',
       experiencie_years: '',
     },
     mode: 'onChange',
   });
-  const onSubmit = (data: any) => console.log(data);
-  const handlePicture = (e: any) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setPicture(e.target.files[0]);
+  const onSubmit = (data: any) => {
+    if (isDirty && picture !== '') {
+      console.log(data);
     } else {
-      setPicture(null);
+      failedAlert('You should upload a profile picture');
+    }
+  };
+  const handlePicture = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files![0];
+    if (file) {
+      setPicture(file);
+      setPictureURL(URL.createObjectURL(file));
+    } else {
+      // setValue('picture', '', { shouldValidate: false });
     }
   };
 
@@ -226,15 +237,27 @@ const TalentRegisterPage = () => {
         </div>
 
         <div>
+          <label className="cursor-pointer" htmlFor="coverImage">
+            <Avatar
+              size="xxl"
+              src={pictureURL ? pictureURL : '/no-image.jpg'}
+              alt="profile picture"
+              variant="circular"
+            />
+          </label>
           <input
+            id="coverImage"
             type="file"
+            className="hidden cursor-pointer"
             onChange={(e) => handlePicture(e)}
             accept="image/*"
           />
         </div>
 
         <div>
-          <Button type="submit">Save</Button>
+          <Button disabled={!isValid} type="submit">
+            Save
+          </Button>
         </div>
       </form>
     </div>
