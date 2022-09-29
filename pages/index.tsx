@@ -1,11 +1,18 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import { useRouter } from 'next/router';
-import PrimaryLayout from '../components/layouts/primary/PrimaryLayout';
 import { NextPageWithLayout } from './page';
 
+import LoginButton from '../components/buttons/Login';
+import LogoutButton from '../components/buttons/logout';
+import PrimaryLayout from '../components/layouts/primary/PrimaryLayout';
 import en from '../locales/en/home';
 import es from '../locales/es/home';
 
 const Home: NextPageWithLayout = () => {
+  const { user, isAuthenticated, isLoading } = useAuth0();
+
+  console.log({ user, isAuthenticated, isLoading });
+
   const router = useRouter();
   const { locale } = router;
 
@@ -20,6 +27,9 @@ const Home: NextPageWithLayout = () => {
         <button>{t.button}</button>
       </div>
       <div>{t.cookies}</div>
+
+      <LoginButton />
+      <LogoutButton />
     </div>
   );
 };

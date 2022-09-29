@@ -12,21 +12,31 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { TiDeleteOutline } from 'react-icons/ti';
-import PrimaryLayout from '../../components/layouts/primary/PrimaryLayout';
 import { IUser } from '../../interfaces/user.interface';
 import { CountriesList } from '../../lib/countries/countriesList';
 import { failedAlert } from '../../services/notification.service';
 import { NextPageWithLayout } from '../page';
 
+import { useAuth0 } from '@auth0/auth0-react';
+import PrimaryLayout from '../../components/layouts/primary/PrimaryLayout';
 import en from '../../locales/en/talent-register';
 import es from '../../locales/es/talent-register';
 
 const TalentRegisterPage: NextPageWithLayout = () => {
   const router = useRouter();
   const { locale } = router;
+  const { isAuthenticated, isLoading } = useAuth0();
 
   const t = locale === 'en' ? en : es;
 
+  if (isLoading) {
+    return <div>loading...</div>;
+  }
+
+  if (!isAuthenticated && !isLoading) {
+    router.replace('/');
+    return null;
+  }
   return (
     <div>
       <div className=" pb-6 text-blue-gray-800">
@@ -43,6 +53,7 @@ const TalentRegisterPage: NextPageWithLayout = () => {
 TalentRegisterPage.getLayout = (page) => {
   return <PrimaryLayout pageTitle="Talent Register">{page}</PrimaryLayout>;
 };
+
 export default TalentRegisterPage;
 
 interface IRegisterForm {
