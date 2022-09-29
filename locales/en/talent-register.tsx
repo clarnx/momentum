@@ -4,7 +4,7 @@ export default {
   pictureTitle: 'Choose your profile picture',
   pictureSubtitle: `Smile, we know that you look awesome.`,
   button: `Save`,
-  skillDescription_empty: "you haven't added any skills",
+  skillDescription_empty: "You haven't added any skills",
   skillDescription_1: 'You have',
   skillDescription_2: 'skills added',
   addSkillButton: 'add',
