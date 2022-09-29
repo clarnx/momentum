@@ -67,7 +67,7 @@ const Header: React.FC<IHeader> = ({ className, ...headerProps }) => {
         <div className="flex items-center justify-between text-blue-gray-900 max-w-[1550px] m-auto">
           <Typography
             as="a"
-            href="#"
+            href="/"
             variant="small"
             className="mr-4 cursor-pointer py-1.5 font-normal"
           >
