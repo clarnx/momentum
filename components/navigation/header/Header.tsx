@@ -1,58 +1,4 @@
-// import { Button } from '@material-tailwind/react';
-// import Link from 'next/link';
-// import { useRouter } from 'next/router';
-// import en from '../../../locales/en/navbar';
-// import es from '../../../locales/es/navbar';
-
-// export interface IHeader extends React.ComponentPropsWithoutRef<'header'> {}
-
-// const Header: React.FC<IHeader> = ({ className, ...headerProps }) => {
-//   const router = useRouter();
-//   const { locale } = router;
-
-//   const t = locale === 'en' ? en : es;
-
-//   const changeLanguage = (e: any) => {
-//     const locale = e.target.value;
-//     router.push(router.pathname, router.asPath, { locale });
-//   };
-
-//   return (
-//     <header
-//       {...headerProps}
-//       className={`w-full flex flex-row justify-between items-center shadow-md ${className}`}
-//     >
-//       <div className="space-x-5 m-5">
-//         <Link href="/">
-//           <a className="hover:underline font-semibold ">{t.item1}</a>
-//         </Link>
-//         <Link href="/talent-register">
-//           <a className="hover:underline font-semibold ">{t.item2}</a>
-//         </Link>
-//       </div>
-//       <div className="space-x-5 m-5 flex items-center">
-//         <div>
-//           <Button>Login</Button>
-//         </div>
-//         <select
-//           className="cursor-pointer p-2 outline-none"
-//           defaultValue={locale}
-//           onChange={changeLanguage}
-//         >
-//           <option className="p-2" value="en">
-//             EN
-//           </option>
-//           <option className="p-2" value="es">
-//             ES
-//           </option>
-//         </select>
-//       </div>
-//     </header>
-//   );
-// };
-
-// export default Header;
-
+import { useAuth0 } from '@auth0/auth0-react';
 import {
   Button,
   IconButton,
@@ -65,6 +11,8 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import en from '../../../locales/en/navbar';
 import es from '../../../locales/es/navbar';
+import LoginButton from '../../buttons/login/LoginButton';
+import LogoutButton from '../../buttons/logout/LogoutButton';
 
 export interface IHeader extends React.ComponentPropsWithoutRef<'header'> {}
 
@@ -72,6 +20,7 @@ const Header: React.FC<IHeader> = ({ className, ...headerProps }) => {
   const [openNav, setOpenNav] = useState(false);
   const router = useRouter();
   const { locale } = router;
+  const { isAuthenticated, isLoading } = useAuth0();
 
   const t = locale === 'en' ? en : es;
 
@@ -118,21 +67,15 @@ const Header: React.FC<IHeader> = ({ className, ...headerProps }) => {
         <div className="flex items-center justify-between text-blue-gray-900 max-w-[1550px] m-auto">
           <Typography
             as="a"
-            href="#"
+            href="/"
             variant="small"
             className="mr-4 cursor-pointer py-1.5 font-normal"
           >
-            <span>Academlo Recruiter</span>
+            <span>Momentum</span>
           </Typography>
           <div className="flex items-center gap-4">
             <div className="hidden md:block text-right">{navList}</div>
-            <Button
-              variant="gradient"
-              size="sm"
-              className="hidden md:inline-block"
-            >
-              <span>{t.login}</span>
-            </Button>
+            {isAuthenticated ? <LogoutButton /> : <LoginButton />}
             <select
               className="cursor-pointer p-2 outline-none hidden md:inline-block"
               defaultValue={locale}
