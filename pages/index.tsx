@@ -1,7 +1,7 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { NextPageWithLayout } from './page';
 
-import { GetStaticProps } from 'next';
+import { useRouter } from 'next/router';
 import LoginButton from '../components/buttons/login/LoginButton';
 import LogoutButton from '../components/buttons/logout/LogoutButton';
 import PrimaryLayout from '../components/layouts/primary/PrimaryLayout';
@@ -12,13 +12,13 @@ interface IHome {
   locale: string;
 }
 
-const Home: NextPageWithLayout<IHome> = ({ locale }) => {
+const Home: NextPageWithLayout<IHome> = () => {
   const { user, isAuthenticated, isLoading } = useAuth0();
 
   console.log({ user, isAuthenticated, isLoading });
 
-  // const router = useRouter();
-  // const { locale } = router;
+  const router = useRouter();
+  const { locale } = router;
 
   const t = locale === 'en' ? en : es;
   return (
@@ -44,10 +44,10 @@ Home.getLayout = (page) => {
   return <PrimaryLayout pageTitle="Inicio">{page}</PrimaryLayout>;
 };
 
-export const getStaticProps: GetStaticProps = ({ locale }) => {
-  return {
-    props: {
-      locale,
-    },
-  };
-};
+// export const getStaticProps: GetStaticProps = ({ locale }) => {
+//   return {
+//     props: {
+//       locale,
+//     },
+//   };
+// };
