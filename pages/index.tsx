@@ -14,7 +14,6 @@ interface IHome {
 
 const Home: NextPageWithLayout<IHome> = () => {
   const { user, isAuthenticated, isLoading } = useAuth0();
-
   console.log({ user, isAuthenticated, isLoading });
 
   const router = useRouter();
