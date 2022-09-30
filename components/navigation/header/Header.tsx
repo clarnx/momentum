@@ -11,8 +11,8 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import en from '../../../locales/en/navbar';
 import es from '../../../locales/es/navbar';
-import LoginButton from '../../buttons/Login';
-import LogoutButton from '../../buttons/logout';
+import LoginButton from '../../buttons/login/LoginButton';
+import LogoutButton from '../../buttons/logout/LogoutButton';
 
 export interface IHeader extends React.ComponentPropsWithoutRef<'header'> {}
 

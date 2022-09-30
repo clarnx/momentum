@@ -2,8 +2,8 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { NextPageWithLayout } from './page';
 
 import { GetStaticProps } from 'next';
-import LoginButton from '../components/buttons/Login';
-import LogoutButton from '../components/buttons/logout';
+import LoginButton from '../components/buttons/login/LoginButton';
+import LogoutButton from '../components/buttons/logout/LogoutButton';
 import PrimaryLayout from '../components/layouts/primary/PrimaryLayout';
 import en from '../locales/en/home';
 import es from '../locales/es/home';

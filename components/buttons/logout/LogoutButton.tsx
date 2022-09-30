@@ -2,10 +2,10 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { Button } from '@material-tailwind/react';
 
 export interface ILogoutButton {
-  text: string;
+  text?: string;
 }
 
-const LogoutButton: React.FC<ILogoutButton> = ({ text }) => {
+const LogoutButton: React.FC<ILogoutButton> = ({ text = 'Logout' }) => {
   const { logout } = useAuth0();
   return (
     <Button
