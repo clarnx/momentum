@@ -1,6 +1,5 @@
 import { ThemeProvider } from '@material-tailwind/react';
 import type { AppProps } from 'next/app';
-import Router from 'next/router';
 import '../styles/globals.css';
 import { NextPageWithLayout } from './page';
 
@@ -12,10 +11,10 @@ interface AppPropsWithLayout extends AppProps {
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page) => page);
-  const onRedirectCallback = (appState?: any) => {
-    // Use Next.js's Router.replace method to replace the url
-    Router.replace(appState?.returnTo || '/');
-  };
+  // const onRedirectCallback = (appState?: any) => {
+  //   // Use Next.js's Router.replace method to replace the url
+  //   Router.replace(appState?.returnTo || '/');
+  // };
   return (
     <Auth0Provider
       //@ts-ignore
